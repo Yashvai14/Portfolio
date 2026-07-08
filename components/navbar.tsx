@@ -47,7 +47,7 @@ const Navbar = () => {
           className="fixed left-0 w-full z-50 px-3"
         >
           <motion.ul
-            className="flex justify-center items-center bg-white/10 backdrop-blur-md space-x-8 p-4 rounded-3xl w-full max-w-[650px] mx-auto shadow-lg relative px-6"
+            className="flex justify-center items-center bg-white/10 backdrop-blur-md space-x-2 sm:space-x-4 md:space-x-8 p-2.5 sm:p-4 rounded-3xl w-full max-w-[650px] mx-auto shadow-lg relative px-4 sm:px-6 text-xs sm:text-sm"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -55,7 +55,7 @@ const Navbar = () => {
             {navLinks.map((link) => (
               <motion.li
                 key={link.name}
-                className={`relative text-white cursor-pointer px-3 py-1 rounded-lg`}
+                className="relative text-white cursor-pointer px-2 sm:px-3 py-1 rounded-lg"
                 whileHover={{ scale: 1.1 }}
                 transition={{ type: "spring", stiffness: 300 }}
               >
