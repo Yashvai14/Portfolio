@@ -11,7 +11,7 @@ export async function generateStaticParams() {
     where: { published: true },
     select: { slug: true },
   });
-  return posts.map((post) => ({
+  return posts.map((post: { slug: string }) => ({
     slug: post.slug,
   }));
 }
