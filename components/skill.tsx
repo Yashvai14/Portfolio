@@ -63,7 +63,7 @@ const Skills = () => {
       />
 
       {/* Skill Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto" style={{width: "1200px"}}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[90%] max-w-[1200px] mx-auto">
         {["frontend", "backend", "tools"].map((cat, idx) => (
           <motion.div
             key={idx}
@@ -81,7 +81,7 @@ const Skills = () => {
       {/* Platforms */}
       <div>
         <h3 className="text-3xl font-semibold mt-16 mb-6">Platforms & Tools I Use</h3>
-        <motion.div className="mt-12 max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20"
+        <motion.div className="mt-12 w-[90%] max-w-4xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 backdrop-blur-sm p-6 rounded-xl border border-purple-500/20"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}

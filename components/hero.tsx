@@ -35,7 +35,7 @@ const TypedParagraph = () => {
 
   return (
     <motion.p
-      className="w-[56%] text-gray-400 text-[15px] flex flex-wrap gap-x-[4px] gap-y-[2px]"
+      className="w-full lg:w-[70%] xl:w-[56%] text-gray-400 text-[15px] flex flex-wrap gap-x-[4px] gap-y-[2px]"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -61,34 +61,34 @@ const TypedParagraph = () => {
 
 const Hero = () => {
   return (
-    <div className="relative w-full overflow-hidden min-h-screen flex items-center justify-center" id="home">
+    <div className="relative w-full overflow-hidden min-h-screen flex items-center justify-center px-4" id="home">
       {/* Animated Background Blobs */}
       <motion.div
-        className="bg-blue-600 h-[300px] w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
+        className="bg-blue-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
         animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
         transition={{ duration: 8, repeat: Infinity }}
       ></motion.div>
       <motion.div
-        className="bg-purple-600 h-[300px] w-[300px] blur-3xl rounded-full opacity-20 absolute top-20 right-8"
+        className="bg-purple-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-20 right-8"
         animate={{ scale: [1, 1.2, 1], rotate: [0, -20, 0] }}
         transition={{ duration: 8, repeat: Infinity, delay: 1 }}
       ></motion.div>
       <motion.div
-        className="bg-green-300 h-[300px] w-[300px] blur-3xl rounded-full opacity-20 absolute bottom-5 right-[50%]"
+        className="bg-green-300 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute bottom-5 right-[50%]"
         animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
         transition={{ duration: 8, repeat: Infinity, delay: 2 }}
       ></motion.div>
 
       {/* Main Hero Card */}
       <motion.div
-        className="flex justify-between items-center w-[1200px] mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-10 space-x-10 relative z-10 py-16 mt-40"
+        className="flex flex-col lg:flex-row justify-between items-center w-[90%] max-w-[1200px] mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-6 md:p-10 space-y-10 lg:space-y-0 lg:space-x-10 relative z-10 py-12 md:py-16 mt-28 md:mt-40"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
       >
         {/* Left Content */}
         <motion.div
-          className="flex flex-col justify-center items-start"
+          className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.2 }}
@@ -104,7 +104,7 @@ const Hero = () => {
           </motion.div>
 
           <motion.h1
-            className="text-3xl font-bold mb-5"
+            className="text-2xl md:text-3xl font-bold mb-5"
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -112,7 +112,7 @@ const Hero = () => {
             Hi, I&apos;m
           </motion.h1>
           <motion.h1
-            className="text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-500 to-violet-500"
+            className="text-4xl md:text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-500 to-violet-500"
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.4 }}
@@ -120,7 +120,7 @@ const Hero = () => {
             Yash Vaidya
           </motion.h1>
           <motion.h1
-            className="text-2xl font-semibold mb-3 text-blue-400"
+            className="text-xl md:text-2xl font-semibold mb-5 text-blue-400"
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, delay: 0.6 }}
@@ -133,7 +133,7 @@ const Hero = () => {
 
           {/* Buttons */}
           <motion.div
-            className="mt-8 flex justify-center items-center gap-4"
+            className="mt-8 flex flex-wrap justify-center lg:justify-start items-center gap-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5, delay: 1 }}
@@ -141,13 +141,13 @@ const Hero = () => {
             <a
               href="/Resume/Yash_Vaidya (1).pdf"
               download="Yash_Vaidya_Resume.pdf"
-              className="bg-gradient-to-br from-violet-500 to-blue-800 text-white px-4 py-2 rounded-lg hover:scale-105 transition duration-300 font-bold"
+              className="bg-gradient-to-br from-violet-500 to-blue-800 text-white px-4 py-2.5 rounded-lg hover:scale-105 transition duration-300 font-bold text-sm"
             >
               Download Resume
             </a>
             <Link
               href="/#contact"
-              className="text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition duration-300 border border-gray-400"
+              className="text-white px-4 py-2.5 rounded-lg hover:bg-gray-800 transition duration-300 border border-gray-400 text-sm"
             >
               Contact Me
             </Link>
@@ -162,7 +162,7 @@ const Hero = () => {
           transition={{ duration: 1 }}
         >
           {/* Profile Card */}
-          <div className="h-[300px] w-[300px] rounded-3xl overflow-hidden relative border border-white/20">
+          <div className="h-[260px] w-[260px] md:h-[300px] md:w-[300px] rounded-3xl overflow-hidden relative border border-white/20">
             <Image
               src="/pictures/Porfolio pic.png"
               alt="Yash Vaidya"

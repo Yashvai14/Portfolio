@@ -5,7 +5,7 @@ import Image from "next/image";
 
 const About = () => {
   return (
-    <div className="w-[1200px] mx-auto my-20 relative" id="about">
+    <div className="w-[90%] max-w-[1200px] mx-auto my-20 relative px-4" id="about">
       {/* Background Neon Blobs */}
       <motion.div
         className="bg-purple-500 h-[300px] w-[300px] blur-3xl rounded-full absolute -top-20 -left-20 opacity-20"
@@ -31,11 +31,11 @@ const About = () => {
           About Me
         </motion.h1>
 
-        <div className="flex justify-between items-center space-x-10 gap-10 relative">
+        <div className="flex flex-col lg:flex-row justify-between items-center gap-10 relative">
           {/* Image Box with Floating Animation */}
           {/* Styled Profile Card */}
           <motion.div
-            className="h-[300px] w-[300px] rounded-3xl relative border border-white/20 overflow-hidden"
+            className="h-[280px] w-[280px] md:h-[300px] md:w-[300px] rounded-3xl relative border border-white/20 overflow-hidden"
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: [50, -20, 50], opacity: 1 }}
             viewport={{ once: true }}
@@ -52,7 +52,7 @@ const About = () => {
 
           {/* Text Content with Staggered Fade-In */}
           <motion.div
-            className="flex flex-col space-y-6 text-gray-400 text-[15px] w-[59%]"
+            className="flex flex-col space-y-6 text-gray-400 text-[15px] w-full lg:w-[59%] text-center lg:text-left"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
