@@ -2,6 +2,8 @@ import { prisma } from "@/lib/prisma";
 import { FolderGit2, FileText } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
   const projectsCount = await prisma.project.count();
   const blogsCount = await prisma.blogPost.count();
