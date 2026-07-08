@@ -1,100 +1,137 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, Variants } from "framer-motion";
+import { FolderGit2, ExternalLink, Github } from "lucide-react";
 
-const projects = [
-  {
-    id: 1,
-    title: "Project One",
-    description: "Showcases my skills in front-end development.",
-    url: "/pictures/FarmPulse.png",
-  },
-  {
-    id: 2,
-    title: "Project Two",
-    description: "Highlights my experience with back-end technologies.",
-    url: "/pictures/FarmPulse.png",
-  },
-  {
-    id: 3,
-    title: "Project Three",
-    description: "Demonstrates my ability to work with full-stack development.",
-    url: "/pictures/FarmPulse.png",
-  },
-  {
-    id: 4,
-    title: "Project Four",
-    description: "Focuses on my expertise in database management.",
-    url: "/pictures/FarmPulse.png",
-  },
-];
+type Project = {
+  id: string;
+  title: string;
+  description: string;
+  imageUrl: string | null;
+  githubUrl: string | null;
+  liveUrl: string | null;
+  tags: string[];
+};
 
-const Projects = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.5, ease: "easeOut" },
+  }),
+};
 
+const Projects = ({ projects = [] }: { projects?: Project[] }) => {
   return (
-    <div className="w-full overflow-hidden py-24 text-white relative" id="project">
-      <h1 className="text-4xl text-center font-bold">My Projects</h1>
+    <section className="w-full py-24 text-white relative" id="project">
+      {/* Section heading */}
+      <motion.div
+        className="text-center mb-16"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
+        <h2 className="text-4xl font-bold mb-3">My Projects</h2>
+        <p className="text-gray-400 max-w-xl mx-auto text-sm">
+          A selection of things I&apos;ve built — from full stack apps to AI-powered platforms.
+        </p>
+      </motion.div>
 
-      <div className="mt-16 relative overflow-hidden w-[1300px] py-5 mx-auto rounded-2xl">
-        <motion.div
-          className="flex space-x-6"
-          animate={{ x: hoveredCard !== null ? "0%" : ["0%", "-100%"] }}
-          transition={{
-            repeat: Infinity,
-            duration: 25,
-            ease: "linear",
-          }}
-        >
-          {[...projects, ...projects].map((proj, idx) => (
+      {projects.length === 0 ? (
+        <div className="mt-8 text-center text-gray-500">
+          <FolderGit2 className="w-14 h-14 mx-auto mb-3 opacity-40" />
+          <p className="text-sm">No projects added yet.</p>
+        </div>
+      ) : (
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {projects.map((proj, idx) => (
             <motion.div
-              key={idx}
-              className="relative min-w-[400px] p-6 rounded-3xl cursor-pointer flex flex-col justify-center items-center bg-white/10 backdrop-blur-md shadow-lg"
-              onMouseEnter={() => setHoveredCard(idx)}
-              onMouseLeave={() => setHoveredCard(null)}
+              key={proj.id}
+              custom={idx}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="group relative flex flex-col bg-white/5 border border-white/10 hover:border-purple-500/40 rounded-2xl overflow-hidden backdrop-blur-sm transition-colors duration-300 shadow-lg"
             >
-              {/* Neon Glow Background */}
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-purple-500 to-blue-500 opacity-10 blur-2xl"></div>
+              {/* Neon glow on hover */}
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
 
-              <AnimatePresence mode="wait">
-                {hoveredCard === idx ? (
-                  <motion.div
-                    key="expanded"
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.95, opacity: 0 }}
-                    transition={{ duration: 0.6, ease: "easeInOut" }} // smoother closing
-                    className="z-10 text-center flex flex-col items-center justify-center"
-                  >
-                    <Image
-                      src={proj.url ?? "/placeholder.png"}
-                      alt={proj.title}
-                      width={400}
-                      height={250}
-                      className="rounded-2xl mb-4"
-                    />
-                    <h1 className="text-2xl font-bold mb-2">{proj.title}</h1>
-                    <p className="text-gray-300 text-[15px]">{proj.description}</p>
-                  </motion.div>
+              {/* Project image */}
+              <div className="relative w-full h-44 overflow-hidden bg-white/5">
+                {proj.imageUrl ? (
+                  <Image
+                    src={proj.imageUrl}
+                    alt={proj.title}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  />
                 ) : (
-                  <motion.div
-                    key="title-only"
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.95, opacity: 0 }}
-                    transition={{ duration: 0.5, ease: "easeInOut" }} // smooth exit
-                    className="z-10 text-center"
-                  >
-                    <h1 className="text-2xl font-semibold">{proj.title}</h1>
-                  </motion.div>
+                  <div className="w-full h-full flex items-center justify-center">
+                    <FolderGit2 className="w-12 h-12 text-gray-600" />
+                  </div>
                 )}
-              </AnimatePresence>
+                {/* Gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0f1e] via-transparent to-transparent" />
+              </div>
+
+              {/* Card body */}
+              <div className="flex flex-col flex-1 p-5">
+                <h3 className="text-lg font-bold text-white mb-2 leading-snug group-hover:text-purple-300 transition-colors">
+                  {proj.title}
+                </h3>
+                <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 flex-1">
+                  {proj.description}
+                </p>
+
+                {/* Tags */}
+                {proj.tags?.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-4">
+                    {proj.tags.slice(0, 4).map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-[11px] px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/20"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                {/* Links */}
+                <div className="flex gap-3 mt-5 pt-4 border-t border-white/10">
+                  {proj.liveUrl && (
+                    <a
+                      href={proj.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 transition-colors"
+                    >
+                      <ExternalLink className="w-3.5 h-3.5" /> Live Demo
+                    </a>
+                  )}
+                  {proj.githubUrl && (
+                    <a
+                      href={proj.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
+                    >
+                      <Github className="w-3.5 h-3.5" /> GitHub
+                    </a>
+                  )}
+                </div>
+              </div>
             </motion.div>
           ))}
-        </motion.div>
-      </div>
-    </div>
+        </div>
+      )}
+    </section>
   );
 };
 

@@ -1,49 +1,43 @@
 "use client";
-import React, { useEffect } from "react";
-import { motion, useAnimation } from "framer-motion";
+import React from "react";
+import { motion, Variants } from "framer-motion";
 
 const skills = {
   frontend: [
-    { name: "React/Next.js", level: 95 },
+    { name: "Next.js / React.js", level: 92 },
     { name: "TypeScript", level: 90 },
-    { name: "Tailwind CSS", level: 95 },
-    { name: "HTML/CSS", level: 98 },
+    { name: "Tailwind CSS", level: 93 },
+    { name: "HTML5 / CSS3", level: 96 },
   ],
   backend: [
-    { name: "Node.js", level: 88 },
-    { name: "Python", level: 85 },
-    { name: "PostgreSQL", level: 82 },
-    { name: "REST APIs", level: 92 },
+    { name: "FastAPI (Python)", level: 88 },
+    { name: "Node.js", level: 82 },
+    { name: "PostgreSQL", level: 84 },
+    { name: "REST API / JWT / OAuth 2.0", level: 87 },
   ],
   tools: [
-    { name: "Git/GitHub", level: 95 },
-    { name: "Docker", level: 78 },
-    { name: "AWS", level: 75 },
-    { name: "Figma", level: 88 },
+    { name: "LangChain / LangGraph", level: 85 },
+    { name: "Ollama (Local LLMs)", level: 80 },
+    { name: "Telegram / Gmail / Slack APIs", level: 83 },
+    { name: "Git / GitHub", level: 92 },
   ],
   platforms: [
-    "VS Code", "Postman", "Figma", "Chrome DevTools",
-    "GitHub", "Netlify", "Vercel", "Supabase"
+    "VS Code", "Postman", "GitHub", "Vercel",
+    "n8n", "Supabase", "Ollama", "Prisma"
   ]
 };
 
 const Skills = () => {
-  const cardVariants = {
+  const cardVariants: Variants = {
     hidden: { opacity: 0, y: 50 },
     visible: (i: number) => ({
       opacity: 1,
       y: 0,
-      transition: { delay: i * 0.2, duration: 0.6, ease: ["easeInOut"] },
+      transition: { delay: i * 0.2, duration: 0.6, ease: "easeInOut" },
     }),
   };
 
-  const barVariants = {
-    hidden: { width: 0 },
-    visible: (level: number) => ({
-      width: `${level}%`,
-      transition: { duration: 1.2, ease: ["easeInOut"] },
-    }),
-  };
+
 
   const badgeVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -79,7 +73,7 @@ const Skills = () => {
             viewport={{ once: true }}
             variants={cardVariants}
           >
-            <SkillCard title={cat === "frontend" ? "Frontend Development" : cat === "backend" ? "Backend Development" : "Tools & Platforms"} skills={skills[cat]} />
+            <SkillCard title={cat === "frontend" ? "Frontend Development" : cat === "backend" ? "Backend & APIs" : "AI / Automation"} skills={skills[cat as keyof typeof skills] as { name: string; level: number }[]} />
           </motion.div>
         ))}
       </div>
@@ -131,12 +125,12 @@ const Skills = () => {
       I&apos;m always expanding my skillset and staying current with emerging technologies.
     </p>
 
-    <motion.ul className="flex flex-wrap justify-center gap-6"
+    <motion.ul className="grid grid-cols-2 gap-4 max-w-md mx-auto"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
     >
-      {["Machine Learning", "TypeScript Advanced Concepts", "System Design", "Gen AI"].map((item, i) => (
+      {["System Design", "Advanced AI Agents", "C++ DSA", "Machine Learning"].map((item, i) => (
         <motion.li
           key={i}
           custom={i}
@@ -174,17 +168,14 @@ const SkillCard = ({ title, skills }: { title: string; skills: { name: string; l
             <span>{skill.name}</span>
             <span>{skill.level}%</span>
           </div>
-          <motion.div
-            className="w-full bg-gray-700 rounded-full h-2"
-            initial={{ width: 0 }}
-            whileInView={{ width: `${skill.level}%` }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
-          >
-            <div
+          <div className="w-full bg-gray-700 rounded-full h-2">
+            <motion.div
               className="h-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-500"
-              style={{ width: "100%" }}
-            ></div>
-          </motion.div>
+              initial={{ width: 0 }}
+              whileInView={{ width: `${skill.level}%` }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+            />
+          </div>
         </div>
       ))}
     </div>

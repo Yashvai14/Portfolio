@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const About = () => {
   return (
@@ -32,19 +33,21 @@ const About = () => {
 
         <div className="flex justify-between items-center space-x-10 gap-10 relative">
           {/* Image Box with Floating Animation */}
+          {/* Styled Profile Card */}
           <motion.div
-            className="h-[300px] w-[300px] bg-gray-400 rounded-3xl relative"
+            className="h-[300px] w-[300px] rounded-3xl relative border border-white/20 overflow-hidden"
             initial={{ y: 50, opacity: 0 }}
             whileInView={{ y: [50, -20, 50], opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
           >
-            <motion.div
-              className="bg-violet-600 h-[300px] w-[300px] blur-3xl rounded-full opacity-20 absolute -top-10 -left-10"
-              whileInView={{ x: [0, 20, 0], y: [0, -20, 0] }}
-              viewport={{ once: true }}
-              transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-            ></motion.div>
+            <Image
+              src="/pictures/Porfolio pic.png"
+              alt="Yash Vaidya"
+              fill
+              className="object-cover"
+              unoptimized
+            />
           </motion.div>
 
           {/* Text Content with Staggered Fade-In */}
@@ -65,31 +68,34 @@ const About = () => {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              Passionate Web Developer & Exploring AI/ML
+              Full Stack Developer · AI & Automation
             </motion.h2>
             <motion.p
+              className="text-justify"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              Hello! I’m Yash, a passionate Computer Engineering student with a strong foundation in web development, software engineering, and AI-driven solutions.
+              Hello! I’m Yash, a final-year Computer Engineering student from SSIT, Nagpur, with hands-on experience building full stack web applications, SaaS platforms, and AI-powered automation tools using Next.js, FastAPI, PostgreSQL, and LangChain.
             </motion.p>
             <motion.p
+              className="text-justify"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              I’ve gained hands-on experience through an internship at InternPro Tech, multiple hackathons, and organizing tech events that challenged me to solve real-world problems with creativity and code. I’ve also completed a Web Development Bootcamp, solidifying my expertise in frontend and backend development, scalable architectures, and modern frameworks.
+              During my internship at InternPro (May–Nov 2025), I built the company’s main business website, an LMS platform, a logistics operations dashboard with RBAC, and an e-commerce admin panel with Razorpay integration. I also set up n8n-based automation workflows for client onboarding pipelines.
             </motion.p>
             <motion.p
+              className="text-justify"
               variants={{
                 hidden: { opacity: 0, y: 20 },
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              Currently, I’m diving deep into Artificial Intelligence and Machine Learning, exploring areas like AI-powered automation, predictive modeling, and intelligent systems integration. I enjoy experimenting with projects that combine full-stack development and AI, bridging the gap between practical applications and emerging technologies.
+              I’m currently exploring Artificial Intelligence and Machine Learning — building multi-agent pipelines with LangChain & LangGraph, hosting local LLMs via Ollama, and integrating AI automation into real-world applications. I won 1st Prize at InnoSpark and presented at NCIETE-2026 (IEEE format).
             </motion.p>
           </motion.div>
         </div>
