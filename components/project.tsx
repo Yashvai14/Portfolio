@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion, Variants } from "framer-motion";
-import { FolderGit2, ExternalLink, Github } from "lucide-react";
+import { motion, AnimatePresence, Variants } from "framer-motion";
+import { FolderGit2, ExternalLink, Github, X } from "lucide-react";
 
 type Project = {
   id: string;
@@ -24,6 +24,20 @@ const cardVariants: Variants = {
 };
 
 const Projects = ({ projects = [] }: { projects?: Project[] }) => {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  // Disable body scroll when modal is active
+  useEffect(() => {
+    if (selectedProject) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [selectedProject]);
+
   return (
     <section className="w-full py-24 text-white relative" id="project">
       {/* Section heading */}
@@ -56,7 +70,8 @@ const Projects = ({ projects = [] }: { projects?: Project[] }) => {
               whileInView="visible"
               viewport={{ once: true }}
               whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="group relative flex flex-col bg-white/5 border border-white/10 hover:border-purple-500/40 rounded-2xl overflow-hidden backdrop-blur-sm transition-colors duration-300 shadow-lg"
+              onClick={() => setSelectedProject(proj)}
+              className="group relative flex flex-col bg-white/5 border border-white/10 hover:border-purple-500/40 rounded-2xl overflow-hidden backdrop-blur-sm transition-colors duration-300 shadow-lg cursor-pointer"
             >
               {/* Neon glow on hover */}
               <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-purple-600/10 to-blue-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -104,7 +119,7 @@ const Projects = ({ projects = [] }: { projects?: Project[] }) => {
                 )}
 
                 {/* Links */}
-                <div className="flex gap-3 mt-5 pt-4 border-t border-white/10">
+                <div className="flex gap-3 mt-5 pt-4 border-t border-white/10" onClick={(e) => e.stopPropagation()}>
                   {proj.liveUrl && (
                     <a
                       href={proj.liveUrl}
@@ -131,8 +146,117 @@ const Projects = ({ projects = [] }: { projects?: Project[] }) => {
           ))}
         </div>
       )}
+
+      {/* Floating Popup Modal */}
+      <AnimatePresence>
+        {selectedProject && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedProject(null)}
+              className="absolute inset-0 bg-black/85 backdrop-blur-md"
+            />
+
+            {/* Modal Box */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.9, y: 20 }}
+              transition={{ type: "spring", duration: 0.5 }}
+              className="relative w-full max-w-2xl bg-[#0b0f19] border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-10 flex flex-col max-h-[90vh]"
+            >
+              {/* Close Button */}
+              <button
+                type="button"
+                onClick={() => setSelectedProject(null)}
+                className="absolute top-4 right-4 z-20 bg-black/50 hover:bg-black/80 text-white/80 hover:text-white p-2 rounded-full border border-white/10 transition-all cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+
+              {/* Scrollable Container */}
+              <div className="overflow-y-auto w-full flex-grow">
+                {/* Project Image */}
+                <div className="relative w-full h-64 sm:h-80 bg-white/5 border-b border-white/10">
+                  {selectedProject.imageUrl ? (
+                    <Image
+                      src={selectedProject.imageUrl}
+                      alt={selectedProject.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <FolderGit2 className="w-16 h-16 text-gray-500" />
+                    </div>
+                  )}
+                  {/* Subtle vignette */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
+                </div>
+
+                {/* Modal Body */}
+                <div className="p-6 sm:p-8 space-y-6">
+                  <div className="space-y-3">
+                    <h3 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                      {selectedProject.title}
+                    </h3>
+
+                    {/* Tags */}
+                    {selectedProject.tags?.length > 0 && (
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/25"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  <div className="text-gray-300 text-sm sm:text-base leading-relaxed whitespace-pre-line font-light">
+                    {selectedProject.description}
+                  </div>
+
+                  {/* Footer Links */}
+                  <div className="flex gap-4 pt-4 border-t border-white/5">
+                    {selectedProject.liveUrl && (
+                      <a
+                        href={selectedProject.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 transition-colors shadow-lg shadow-blue-600/20"
+                      >
+                        <ExternalLink className="w-4 h-4" /> Live Demo
+                      </a>
+                    )}
+                    {selectedProject.githubUrl && (
+                      <a
+                        href={selectedProject.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-sm font-semibold px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 transition-colors border border-white/15"
+                      >
+                        <Github className="w-4 h-4" /> GitHub
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </section>
   );
 };
 
 export default Projects;
+
