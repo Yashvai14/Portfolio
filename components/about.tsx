@@ -36,10 +36,13 @@ const About = () => {
           {/* Styled Profile Card */}
           <motion.div
             className="h-[280px] w-[280px] md:h-[300px] md:w-[300px] rounded-3xl relative border border-white/20 overflow-hidden"
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: [50, -20, 50], opacity: 1 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: [0, -12, 0] }}
             viewport={{ once: true }}
-            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+            transition={{
+              opacity: { duration: 0.8 },
+              y: { duration: 5, repeat: Infinity, ease: "easeInOut" }
+            }}
           >
             <Image
               src="/pictures/Porfolio pic.png"
