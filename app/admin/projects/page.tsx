@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { Plus, Upload, X, Loader2 } from "lucide-react";
+import { Plus, Upload, X, Loader2, Edit2, Trash2 } from "lucide-react";
 import Image from "next/image";
 
 type Project = { id: string; title: string; description: string; imageUrl: string; liveUrl: string; githubUrl: string; tags: string[] };
@@ -11,6 +11,7 @@ export default function AdminProjects() {
   const [loading, setLoading] = useState(true);
   const [isAdding, setIsAdding] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [newProject, setNewProject] = useState({ title: "", description: "", imageUrl: "", githubUrl: "", liveUrl: "", tags: "" });
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -56,21 +57,40 @@ export default function AdminProjects() {
     }
   };
 
-  const handleAdd = async (e: React.FormEvent) => {
+  const handleStartEdit = (project: Project) => {
+    setEditingProjectId(project.id);
+    setPreviewUrl(project.imageUrl || null);
+    setNewProject({
+      title: project.title,
+      description: project.description,
+      imageUrl: project.imageUrl || "",
+      githubUrl: project.githubUrl || "",
+      liveUrl: project.liveUrl || "",
+      tags: project.tags.join(", "),
+    });
+    setIsAdding(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const tagsArray = newProject.tags.split(",").map(t => t.trim()).filter(Boolean);
     try {
-      const res = await fetch("/api/projects", {
-        method: "POST",
+      const url = editingProjectId ? `/api/projects/${editingProjectId}` : "/api/projects";
+      const method = editingProjectId ? "PUT" : "POST";
+      const res = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...newProject, tags: tagsArray }),
       });
       if (res.ok) {
-        const added = await res.json();
-        setProjects([added, ...projects]);
-        setIsAdding(false);
-        setNewProject({ title: "", description: "", imageUrl: "", githubUrl: "", liveUrl: "", tags: "" });
-        setPreviewUrl(null);
+        const saved = await res.json();
+        if (editingProjectId) {
+          setProjects(projects.map(p => p.id === editingProjectId ? saved : p));
+        } else {
+          setProjects([saved, ...projects]);
+        }
+        resetForm();
       } else {
         const err = await res.json();
         alert("Failed to save project: " + (err.error || "Unknown error"));
@@ -85,6 +105,9 @@ export default function AdminProjects() {
     const res = await fetch(`/api/projects/${id}`, { method: "DELETE" });
     if (res.ok) {
       setProjects(projects.filter((p) => p.id !== id));
+      if (editingProjectId === id) {
+        resetForm();
+      }
     } else {
       alert("Failed to delete project");
     }
@@ -92,6 +115,7 @@ export default function AdminProjects() {
 
   const resetForm = () => {
     setIsAdding(false);
+    setEditingProjectId(null);
     setNewProject({ title: "", description: "", imageUrl: "", githubUrl: "", liveUrl: "", tags: "" });
     setPreviewUrl(null);
   };
@@ -110,7 +134,10 @@ export default function AdminProjects() {
       </div>
 
       {isAdding && (
-        <form onSubmit={handleAdd} className="bg-dark-navy-glass p-6 rounded-xl border border-white/10 space-y-4">
+        <form onSubmit={handleSubmit} className="bg-dark-navy-glass p-6 rounded-xl border border-white/10 space-y-4">
+          <h2 className="text-lg font-semibold text-white">
+            {editingProjectId ? "Edit Project" : "Create Project"}
+          </h2>
           <input
             type="text"
             placeholder="Title *"
@@ -198,13 +225,24 @@ export default function AdminProjects() {
             className="w-full bg-black/30 border border-white/10 rounded-lg p-3 text-white placeholder-gray-500"
           />
 
-          <button
-            type="submit"
-            disabled={uploading}
-            className="bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
-          >
-            {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading Image...</> : "Save Project"}
-          </button>
+          <div className="flex gap-3">
+            <button
+              type="submit"
+              disabled={uploading}
+              className="bg-green-600 hover:bg-green-500 disabled:opacity-50 disabled:cursor-not-allowed text-white px-6 py-2 rounded-lg font-medium transition-colors flex items-center gap-2"
+            >
+              {uploading ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading Image...</> : (editingProjectId ? "Save Changes" : "Save Project")}
+            </button>
+            {editingProjectId && (
+              <button
+                type="button"
+                onClick={resetForm}
+                className="bg-white/10 hover:bg-white/20 text-white px-6 py-2 rounded-lg font-medium transition-colors border border-white/10"
+              >
+                Cancel
+              </button>
+            )}
+          </div>
         </form>
       )}
 
@@ -222,9 +260,22 @@ export default function AdminProjects() {
               <div className="flex flex-wrap gap-2 mb-4">
                 {project.tags.map(tag => <span key={tag} className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded-full border border-blue-500/30">{tag}</span>)}
               </div>
-              <button type="button" onClick={() => handleDelete(project.id)} className="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors w-full mt-auto">
-                Delete Project
-              </button>
+              <div className="flex gap-2 mt-auto w-full">
+                <button
+                  type="button"
+                  onClick={() => handleStartEdit(project)}
+                  className="bg-blue-500/15 text-blue-400 hover:bg-blue-500 hover:text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all border border-blue-500/20 flex items-center justify-center gap-1 flex-1"
+                >
+                  <Edit2 className="w-3.5 h-3.5" /> Edit
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(project.id)}
+                  className="bg-red-500/15 text-red-400 hover:bg-red-500 hover:text-white px-3 py-2 rounded-lg text-sm font-semibold transition-all border border-red-500/20 flex items-center justify-center gap-1 flex-1"
+                >
+                  <Trash2 className="w-3.5 h-3.5" /> Delete
+                </button>
+              </div>
             </div>
           ))}
           {projects.length === 0 && (

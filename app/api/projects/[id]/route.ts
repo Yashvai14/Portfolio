@@ -24,3 +24,35 @@ export async function DELETE(
     return NextResponse.json({ error: "Failed to delete project" }, { status: 500 });
   }
 }
+
+export async function PUT(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const data = await req.json();
+    const project = await prisma.project.update({
+      where: { id },
+      data: {
+        title: data.title,
+        description: data.description,
+        imageUrl: data.imageUrl,
+        githubUrl: data.githubUrl,
+        liveUrl: data.liveUrl,
+        tags: data.tags || [],
+      },
+    });
+    return NextResponse.json(project);
+  } catch (error) {
+    console.error(`PUT /api/projects/[id] error for ID ${id}:`, error);
+    return NextResponse.json({ error: "Failed to update project" }, { status: 500 });
+  }
+}
+
