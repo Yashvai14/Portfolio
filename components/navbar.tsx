@@ -3,6 +3,7 @@ import Link from "next/link";
 import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
 
 const navLinks = [
   { name: "Home", href: "/#home" },
@@ -15,6 +16,7 @@ const navLinks = [
 
 const Navbar = () => {
   const [visible, setVisible] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
   const lastScrollY = useRef(0);
   const pathname = usePathname();
 
@@ -25,6 +27,7 @@ const Navbar = () => {
         const prevScrollY = lastScrollY.current;
         if (currentScrollY - prevScrollY > 5) {
           setVisible(false); // scroll down → hide
+          setIsOpen(false); // also close mobile dropdown
         } else if (prevScrollY - currentScrollY > 5) {
           setVisible(true); // scroll up → show
         }
@@ -44,10 +47,11 @@ const Navbar = () => {
           animate={{ y: 40, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          className="fixed left-0 w-full z-50 px-3"
+          className="fixed left-0 w-full z-50 px-3 flex flex-col items-center"
         >
+          {/* Desktop Navbar */}
           <motion.ul
-            className="flex justify-center items-center bg-white/10 backdrop-blur-md space-x-2 sm:space-x-4 md:space-x-8 p-2.5 sm:p-4 rounded-3xl w-full max-w-[650px] mx-auto shadow-lg relative px-4 sm:px-6 text-xs sm:text-sm"
+            className="hidden md:flex justify-center items-center bg-white/10 backdrop-blur-md space-x-2 sm:space-x-4 md:space-x-8 p-2.5 sm:p-4 rounded-3xl w-full max-w-[650px] mx-auto shadow-lg relative px-4 sm:px-6 text-xs sm:text-sm border border-white/10"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -81,6 +85,54 @@ const Navbar = () => {
               </motion.li>
             ))}
           </motion.ul>
+
+          {/* Mobile Navbar Header */}
+          <motion.div
+            className="flex md:hidden justify-between items-center bg-white/10 backdrop-blur-md p-3 px-6 rounded-3xl w-full max-w-[90%] mx-auto shadow-lg border border-white/10 text-white relative"
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="font-bold text-sm tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
+              YASH VAIDYA
+            </span>
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </motion.div>
+
+          {/* Mobile Dropdown Menu overlay */}
+          <AnimatePresence>
+            {isOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.95 }}
+                transition={{ duration: 0.2 }}
+                className="absolute top-16 left-0 right-0 w-full max-w-[90%] mx-auto bg-[#0a0f1e]/95 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col space-y-4 md:hidden mt-2 z-40"
+              >
+                <ul className="flex flex-col space-y-3">
+                  {navLinks.map((link) => (
+                    <li key={link.name}>
+                      <Link
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`block text-center text-white py-2.5 rounded-xl hover:bg-white/5 transition-all text-sm font-medium ${
+                          pathname === link.href ? "text-blue-400 font-bold bg-white/5" : ""
+                        }`}
+                      >
+                        {link.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
