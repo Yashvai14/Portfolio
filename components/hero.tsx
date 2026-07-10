@@ -62,22 +62,25 @@ const TypedParagraph = () => {
 const Hero = () => {
   return (
     <div className="relative w-full min-h-screen flex flex-col justify-start lg:justify-center items-center pt-32 pb-12 lg:py-0 px-0 lg:px-4" id="home">
-      {/* Animated Background Blobs */}
-      <motion.div
-        className="bg-blue-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
-        animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      ></motion.div>
-      <motion.div
-        className="bg-purple-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-20 right-8"
-        animate={{ scale: [1, 1.2, 1], rotate: [0, -20, 0] }}
-        transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-      ></motion.div>
-      <motion.div
-        className="bg-green-300 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute bottom-5 right-[50%]"
-        animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
-        transition={{ duration: 8, repeat: Infinity, delay: 2 }}
-      ></motion.div>
+      {/* Background Blobs Wrapper to prevent horizontal overflow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {/* Animated Background Blobs */}
+        <motion.div
+          className="bg-blue-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
+          transition={{ duration: 8, repeat: Infinity }}
+        ></motion.div>
+        <motion.div
+          className="bg-purple-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-20 right-8"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, -20, 0] }}
+          transition={{ duration: 8, repeat: Infinity, delay: 1 }}
+        ></motion.div>
+        <motion.div
+          className="bg-green-300 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute bottom-5 right-[50%]"
+          animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
+          transition={{ duration: 8, repeat: Infinity, delay: 2 }}
+        ></motion.div>
+      </div>
 
       {/* Main Hero Card */}
       <motion.div

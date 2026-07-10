@@ -6,19 +6,21 @@ import Image from "next/image";
 const About = () => {
   return (
     <div className="w-[90%] max-w-[1200px] mx-auto my-20 relative px-4" id="about">
-      {/* Background Neon Blobs */}
-      <motion.div
-        className="bg-purple-500 h-[300px] w-[300px] blur-3xl rounded-full absolute -top-20 -left-20 opacity-20"
-        whileInView={{ x: [0, 20, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
-        viewport={{ once: true }}
-        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-      ></motion.div>
-      <motion.div
-        className="bg-blue-500 h-[300px] w-[300px] blur-3xl rounded-full absolute -bottom-20 right-0 opacity-20"
-        whileInView={{ x: [0, -20, 0], y: [0, 20, 0], scale: [1, 1.1, 1] }}
-        viewport={{ once: true }}
-        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-      ></motion.div>
+      {/* Background Neon Blobs Wrapper to prevent horizontal overflow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div
+          className="bg-purple-500 h-[300px] w-[300px] blur-3xl rounded-full absolute -top-20 -left-20 opacity-20"
+          whileInView={{ x: [0, 20, 0], y: [0, -20, 0], scale: [1, 1.1, 1] }}
+          viewport={{ once: true }}
+          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+        ></motion.div>
+        <motion.div
+          className="bg-blue-500 h-[300px] w-[300px] blur-3xl rounded-full absolute -bottom-20 right-0 opacity-20"
+          whileInView={{ x: [0, -20, 0], y: [0, 20, 0], scale: [1, 1.1, 1] }}
+          viewport={{ once: true }}
+          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+        ></motion.div>
+      </div>
 
       <div className="py-16 flex flex-col">
         <motion.h1
