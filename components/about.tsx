@@ -37,7 +37,7 @@ const About = () => {
           {/* Image Box with Floating Animation */}
           {/* Styled Profile Card */}
           <motion.div
-            className="h-[280px] w-[280px] md:h-[300px] md:w-[300px] rounded-3xl relative border border-white/20 overflow-hidden"
+            className="h-[280px] w-[280px] md:h-[300px] md:w-[300px] rounded-3xl relative overflow-hidden"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: [0, -12, 0] }}
             viewport={{ once: true }}
