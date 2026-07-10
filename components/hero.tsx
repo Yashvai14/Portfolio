@@ -61,7 +61,7 @@ const TypedParagraph = () => {
 
 const Hero = () => {
   return (
-    <div className="relative w-full min-h-screen flex flex-col justify-start lg:justify-center items-center pt-24 pb-12 lg:py-0 px-0 lg:px-4" id="home">
+    <div className="relative w-full min-h-screen flex flex-col justify-start lg:justify-center items-center pt-32 pb-12 lg:py-0 px-0 lg:px-4" id="home">
       {/* Animated Background Blobs */}
       <motion.div
         className="bg-blue-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
