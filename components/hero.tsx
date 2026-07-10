@@ -61,7 +61,7 @@ const TypedParagraph = () => {
 
 const Hero = () => {
   return (
-    <div className="relative w-full overflow-x-hidden min-h-screen flex flex-col justify-start lg:justify-center items-center pt-24 pb-12 lg:py-0 px-4" id="home">
+    <div className="relative w-full min-h-screen flex flex-col justify-start lg:justify-center items-center pt-24 pb-12 lg:py-0 px-0 lg:px-4" id="home">
       {/* Animated Background Blobs */}
       <motion.div
         className="bg-blue-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
@@ -81,7 +81,7 @@ const Hero = () => {
 
       {/* Main Hero Card */}
       <motion.div
-        className="flex flex-col lg:flex-row justify-between items-center w-[90%] max-w-[1200px] mx-auto bg-white/10 backdrop-blur-md rounded-3xl p-6 md:p-10 space-y-10 lg:space-y-0 lg:space-x-10 relative z-10 py-12 md:py-16 mt-0 lg:mt-24"
+        className="flex flex-col lg:flex-row justify-between items-center w-full lg:w-[90%] max-w-[1200px] mx-auto bg-white/10 backdrop-blur-md rounded-none lg:rounded-3xl p-6 md:p-10 space-y-10 lg:space-y-0 lg:space-x-10 relative z-10 py-12 md:py-16 mt-0 lg:mt-24"
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}

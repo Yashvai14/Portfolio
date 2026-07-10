@@ -5,6 +5,7 @@
 /* 🌐 Global Styles */
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 /* Apply font + gradient background */
@@ -15,6 +16,7 @@ body {
   background-attachment: fixed; /* keeps gradient steady on scroll */
   color: white;
   font-family: 'Poppins', sans-serif;
+  overflow-x: hidden;
 }
 
 /* Custom Scrollbar */
