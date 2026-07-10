@@ -82,7 +82,7 @@ const About = () => {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              Hello! I’m Yash, a final-year Computer Engineering student from SSIT, Nagpur, with hands-on experience building full stack web applications, SaaS platforms, and AI-powered automation tools using Next.js, FastAPI, PostgreSQL, and LangChain.
+              Hello! I’m Yash, a Computer Engineering graduate from SSIT, Nagpur, with hands-on experience building full-stack web applications, SaaS platforms, and AI-powered automation tools using Next.js, FastAPI, PostgreSQL, and LangChain.
             </motion.p>
             <motion.p
               className="text-justify"
@@ -91,7 +91,7 @@ const About = () => {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              During my internship at InternPro (May–Nov 2025), I built the company’s main business website, an LMS platform, a logistics operations dashboard with RBAC, and an e-commerce admin panel with Razorpay integration. I also set up n8n-based automation workflows for client onboarding pipelines.
+              I have worked on real-world D2C business automation projects, building AI-powered workflows for lead management, customer support, CRM automation, and business operations using n8n, custom APIs, and LLMs. I have also developed scalable SaaS platforms, AI dashboards, and automated systems that streamline business processes and improve operational efficiency.
             </motion.p>
             <motion.p
               className="text-justify"
@@ -100,7 +100,7 @@ const About = () => {
                 visible: { opacity: 1, y: 0 },
               }}
             >
-              I’m currently exploring Artificial Intelligence and Machine Learning — building multi-agent pipelines with LangChain & LangGraph, hosting local LLMs via Ollama, and integrating AI automation into real-world applications. I won 1st Prize at InnoSpark and presented at NCIETE-2026 (IEEE format).
+              I’m currently exploring Artificial Intelligence and Machine Learning building multi-agent pipelines with LangChain & LangGraph, hosting local LLMs via Ollama, and integrating AI automation into real-world applications. I won 1st Prize at InnoSpark and presented at NCIETE-2026 (IEEE format).
             </motion.p>
           </motion.div>
         </div>
