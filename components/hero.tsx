@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 
 const TypedParagraph = () => {
-  const paragraph = `Final-year Computer Engineering student building full stack web applications, SaaS platforms, and AI-powered automation tools using Next.js, FastAPI, PostgreSQL, and LangChain. Built end-to-end products integrating third-party APIs and local LLMs, and led technical initiatives across 200+ peers.`;
+  const paragraph = `Computer Engineering graduate building full stack web applications, SaaS platforms, and AI-powered automation tools using Next.js, FastAPI, PostgreSQL, and LangChain. Built end-to-end products integrating third-party APIs and local LLMs, and led technical initiatives across 200+ peers.`;
   const words = paragraph.split(" ");
 
   const containerVariants: Variants = {
