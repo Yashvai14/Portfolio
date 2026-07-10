@@ -47,11 +47,11 @@ const Navbar = () => {
           animate={{ y: 40, opacity: 1 }}
           exit={{ y: -100, opacity: 0 }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          className="fixed left-0 w-full z-50 px-3 flex flex-col items-center"
+          className="fixed inset-x-0 z-50 px-3 flex flex-col items-center"
         >
           {/* Desktop Navbar */}
           <motion.ul
-            className="hidden md:flex justify-center items-center bg-white/10 backdrop-blur-md space-x-2 sm:space-x-4 md:space-x-8 p-2.5 sm:p-4 rounded-3xl w-full max-w-[650px] mx-auto shadow-lg relative px-4 sm:px-6 text-xs sm:text-sm border border-white/10"
+            className="hidden md:flex justify-center items-center  bg-white/10 backdrop-blur-md space-x-2 sm:space-x-4 md:space-x-8 p-2.5 sm:p-4 rounded-3xl w-full max-w-[650px] shadow-lg relative px-4 sm:px-6 text-xs sm:text-sm border border-white/10"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -88,7 +88,7 @@ const Navbar = () => {
 
           {/* Mobile Navbar Header */}
           <motion.div
-            className="flex md:hidden justify-between items-center bg-white/10 backdrop-blur-md p-3 px-6 rounded-3xl w-full max-w-[90%] mx-auto shadow-lg border border-white/10 text-white relative"
+            className="flex md:hidden justify-between items-center bg-white/10 backdrop-blur-md p-3 px-6 rounded-3xl w-full max-w-[90%] shadow-lg border border-white/10 text-white relative"
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5 }}
@@ -113,7 +113,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-16 left-0 right-0 w-full max-w-[90%] mx-auto bg-[#0a0f1e]/95 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col space-y-4 md:hidden mt-2 z-40"
+                className="absolute top-16 w-[90%] bg-[#0a0f1e]/95 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col space-y-4 md:hidden mt-2 z-40"
               >
                 <ul className="flex flex-col space-y-3">
                   {navLinks.map((link) => (

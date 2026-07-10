@@ -55,12 +55,14 @@ const Skills = () => {
         A comprehensive overview of my technical expertise and the tools I use to bring ideas to life
       </p>
 
-      {/* Background Blob */}
-      <motion.div
-        className='w-[300px] h-[300px] rounded-full absolute animate-pulse blur-3xl opacity-10  left-[5%] bg-blue-600'
-        animate={{ scale: [1, 1.2, 1], x: [0, 20, 0], y: [0, -20, 0] }}
-        transition={{ duration: 10, repeat: Infinity, ease: ["easeInOut"] }}
-      />
+      {/* Background Blob Wrapper to prevent horizontal overflow */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div
+          className='w-[300px] h-[300px] rounded-full absolute animate-pulse blur-3xl opacity-10 left-[5%] bg-blue-600'
+          animate={{ scale: [1, 1.2, 1], x: [0, 20, 0], y: [0, -20, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: ["easeInOut"] }}
+        />
+      </div>
 
       {/* Skill Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-[90%] max-w-[1200px] mx-auto">
@@ -101,17 +103,19 @@ const Skills = () => {
 
       {/* Currently Learning */}
       <div className="mt-20 max-w-3xl mx-auto relative">
-  {/* Neon Glowing Background Blobs */}
-  <motion.div
-    className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-purple-500/30 blur-3xl opacity-30"
-    animate={{ x: [0, 20, 0], y: [0, -20, 0], scale: [1, 1.2, 1] }}
-    transition={{ duration: 8, repeat: Infinity, ease: ["easeInOut"] }}
-  />
-  <motion.div
-    className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-blue-500/30 blur-3xl opacity-30"
-    animate={{ x: [0, -20, 0], y: [0, 20, 0], scale: [1, 1.2, 1] }}
-    transition={{ duration: 10, repeat: Infinity, ease: ["easeInOut"] }}
-  />
+  {/* Background Neon Blobs Wrapper to prevent horizontal overflow */}
+  <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+    <motion.div
+      className="absolute -top-10 -left-10 w-40 h-40 rounded-full bg-purple-500/30 blur-3xl opacity-30"
+      animate={{ x: [0, 20, 0], y: [0, -20, 0], scale: [1, 1.2, 1] }}
+      transition={{ duration: 8, repeat: Infinity, ease: ["easeInOut"] }}
+    />
+    <motion.div
+      className="absolute -bottom-10 -right-10 w-40 h-40 rounded-full bg-blue-500/30 blur-3xl opacity-30"
+      animate={{ x: [0, -20, 0], y: [0, 20, 0], scale: [1, 1.2, 1] }}
+      transition={{ duration: 10, repeat: Infinity, ease: ["easeInOut"] }}
+    />
+  </div>
 
   {/* Glass Card */}
   <motion.div 

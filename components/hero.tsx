@@ -22,10 +22,9 @@ const TypedParagraph = () => {
   };
 
   const wordVariants: Variants = {
-    hidden: { opacity: 0, y: 6 },
+    hidden: { opacity: 0 },
     visible: {
       opacity: 1,
-      y: 0,
       transition: {
         duration: 0.3,
         ease: "easeOut",
@@ -35,7 +34,7 @@ const TypedParagraph = () => {
 
   return (
     <motion.p
-      className="w-full lg:w-[70%] xl:w-[56%] text-gray-400 text-[15px] flex flex-wrap gap-x-[4px] gap-y-[2px]"
+      className="w-full lg:w-[70%] xl:w-[56%] text-gray-400 text-[15px] text-justify"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -49,9 +48,9 @@ const TypedParagraph = () => {
           <motion.span
             key={idx}
             variants={wordVariants}
-            className={shouldHighlight ? "text-purple-400 font-semibold inline-block" : "inline-block"}
+            className={shouldHighlight ? "text-purple-400 font-semibold" : ""}
           >
-            {word}
+            {word}{" "}
           </motion.span>
         );
       })}
@@ -61,7 +60,7 @@ const TypedParagraph = () => {
 
 const Hero = () => {
   return (
-    <div className="relative w-full min-h-screen flex flex-col justify-start lg:justify-center items-center pt-32 pb-12 lg:py-0 px-0 lg:px-4" id="home">
+    <div className="relative w-full min-h-screen flex flex-col justify-start items-center pt-32 pb-12 lg:pt-20 lg:pb-16 px-0 lg:px-4" id="home">
       {/* Background Blobs Wrapper to prevent horizontal overflow */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {/* Animated Background Blobs */}
