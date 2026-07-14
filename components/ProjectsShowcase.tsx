@@ -179,8 +179,8 @@ export default function ProjectsShowcase({ initialProjects }: { initialProjects?
 
   const projects: ProjectType[] = (initialProjects?.length ? initialProjects : data?.projects ?? []).map((p: ProjectData) => ({
     id: p.id as string, title: p.title as string, description: p.description as string,
-    tags: (p.tags as string[]) ?? [], image: (p.image || p.imageUrl) as string ?? "", linkDemo: (p.linkDemo || p.liveUrl) as string ?? "",
-    linkSource: (p.linkSource || p.githubUrl) as string ?? "", type: (p.type as string) ?? "Live Demo",
+    tags: (p.tags as string[]) ?? [], image: p.image as string ?? "", linkDemo: p.linkDemo as string ?? "",
+    linkSource: p.linkSource as string ?? "", type: (p.type as string) ?? "Live Demo",
   }));
 
   const panelProjects = projects.slice(0, 3);

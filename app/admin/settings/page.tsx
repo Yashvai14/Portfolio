@@ -449,7 +449,7 @@ export default function AdminPanel() {
                     {/* Image Upload */}
                     <ImageUpload
                       label="Cover Image"
-                      value={((proj as Record<string, unknown>).image as string) ?? ""}
+                      value={proj.image ?? ""}
                       onChange={(url) => handleProjectChange(idx, "image", url)}
                     />
 
