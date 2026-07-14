@@ -1,209 +1,246 @@
 "use client";
-import React from "react";
-import { VscGithub } from "react-icons/vsc";
-import { FaLinkedin } from "react-icons/fa6";
-import { motion, Variants } from "framer-motion";
-import Link from "next/link";
-import Image from "next/image";
 
-const TypedParagraph = () => {
-  const paragraph = `Computer Engineering graduate building full stack web applications, SaaS platforms, and AI-powered automation tools using Next.js, FastAPI, PostgreSQL, and LangChain. Built end-to-end products integrating third-party APIs and local LLMs, and led technical initiatives across 200+ peers.`;
-  const words = paragraph.split(" ");
+import { useEffect, useRef } from "react";
+import { ArrowDown, Cpu, Globe } from "lucide-react";
+import gsap from "gsap";
+import { usePortfolioData } from "@/context/PortfolioDataContext";
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
+export default function Hero() {
+  const { data, loading } = usePortfolioData();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
+  const titleRef = useRef<HTMLHeadingElement>(null);
+  const subtitleRef = useRef<HTMLDivElement>(null);
+  const ctaRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (loading) return;
+
+    // Break title down into characters for text reveal
+    const titleEl = titleRef.current;
+    if (!titleEl) return;
+
+    const text = titleEl.textContent || "";
+    titleEl.innerHTML = "";
+    
+    // Split into characters, wrapped in span elements
+    text.split("").forEach((char) => {
+      const span = document.createElement("span");
+      span.textContent = char === " " ? "\u00A0" : char;
+      span.className = "inline-block opacity-0 translate-y-8 filter blur-[2px]";
+      titleEl.appendChild(span);
+    });
+
+    const chars = titleEl.querySelectorAll("span");
+
+    // Timeline setup
+    const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+    tl.to(badgeRef.current, {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.02,
-        delayChildren: 0.6,
-      },
-    },
+      y: 0,
+      duration: 1,
+      delay: 0.2,
+    })
+      .to(
+        chars,
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          stagger: 0.03,
+          duration: 0.8,
+        },
+        "-=0.6"
+      )
+      .to(
+        subtitleRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+        },
+        "-=0.4"
+      )
+      .to(
+        ctaRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.8,
+        },
+        "-=0.6"
+      )
+      .to(
+        scrollRef.current,
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+        },
+        "-=0.4"
+      );
+
+    // Floating animation for scroll indicator
+    gsap.to(scrollRef.current, {
+      y: 8,
+      repeat: -1,
+      yoyo: true,
+      duration: 1.5,
+      ease: "power1.inOut",
+    });
+  }, [loading, data.hero.title]);
+
+  const handleScrollClick = () => {
+    const element = document.getElementById("projects");
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
   };
 
-  const wordVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    },
-  };
+  if (loading) {
+    return (
+      <section className="relative min-h-screen flex flex-col items-center justify-center bg-[#050816]">
+        <div className="w-8 h-8 rounded-full border-2 border-brand-tertiary border-t-transparent animate-spin" />
+      </section>
+    );
+  }
 
   return (
-    <motion.p
-      className="w-full lg:w-[70%] xl:w-[56%] text-gray-400 text-[15px] text-justify"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+    <section
+      id="home"
+      ref={containerRef}
+      className="relative min-h-screen flex flex-col items-center justify-center text-center px-6 py-20"
     >
-      {words.map((word, idx) => {
-        const highlightWords = ["full", "stack", "web", "saas", "ai-powered", "next.js", "fastapi", "postgresql", "langchain", "llms", "apis"];
-        const shouldHighlight = highlightWords.some((w) =>
-          word.toLowerCase().replace(/[^a-z.]/g, "").includes(w)
-        );
-        return (
-          <motion.span
-            key={idx}
-            variants={wordVariants}
-            className={shouldHighlight ? "text-purple-400 font-semibold" : ""}
+      {/* Dynamic Aura background lights */}
+      <div className="absolute top-[20%] left-[20%] w-[350px] h-[350px] rounded-full aurora-blue opacity-50 blur-[100px] pointer-events-none -z-10 animate-glow-pulse" />
+      <div className="absolute bottom-[20%] right-[20%] w-[350px] h-[350px] rounded-full aurora-purple opacity-40 blur-[100px] pointer-events-none -z-10 animate-glow-pulse [animation-delay:1.5s]" />
+
+      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-center z-10 w-full">
+        {/* Left Column: Text & CTA */}
+        <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left">
+          {/* Availability Badge */}
+          <div
+            ref={badgeRef}
+            className="opacity-0 translate-y-4 mb-6 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/3 border border-white/10"
           >
-            {word}{" "}
-          </motion.span>
-        );
-      })}
-    </motion.p>
-  );
-};
-
-const Hero = () => {
-  return (
-    <div className="relative w-full min-h-screen flex flex-col justify-start items-center pt-32 pb-12 lg:pt-20 lg:pb-16 px-0 lg:px-4" id="home">
-      {/* Background Blobs Wrapper to prevent horizontal overflow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        {/* Animated Background Blobs */}
-        <motion.div
-          className="bg-blue-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-0 left-0"
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
-          transition={{ duration: 8, repeat: Infinity }}
-        ></motion.div>
-        <motion.div
-          className="bg-purple-600 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute top-20 right-8"
-          animate={{ scale: [1, 1.2, 1], rotate: [0, -20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, delay: 1 }}
-        ></motion.div>
-        <motion.div
-          className="bg-green-300 h-[200px] w-[200px] md:h-[300px] md:w-[300px] blur-3xl rounded-full opacity-20 absolute bottom-5 right-[50%]"
-          animate={{ scale: [1, 1.2, 1], rotate: [0, 20, 0] }}
-          transition={{ duration: 8, repeat: Infinity, delay: 2 }}
-        ></motion.div>
-      </div>
-
-      {/* Main Hero Card */}
-      <motion.div
-        className="flex flex-col lg:flex-row justify-between items-center w-full lg:w-[90%] max-w-[1200px] mx-auto bg-white/10 backdrop-blur-md rounded-none lg:rounded-3xl p-6 md:p-10 space-y-10 lg:space-y-0 lg:space-x-10 relative z-10 py-12 md:py-16 mt-0 lg:mt-24"
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-      >
-        {/* Mobile-only Open To Work Badge - Order 1 */}
-        <motion.div
-          className="flex lg:hidden space-x-4 justify-center items-center text-white backdrop-blur-md bg-white/10 p-2 rounded-3xl w-[180px] order-1"
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <h1>Open To Work</h1>
-          <div className="h-4 w-4 bg-green-600 animate-pulse rounded-full"></div>
-        </motion.div>
-
-        {/* Right Image & Social - Order 2 on mobile, Order 2 on desktop */}
-        <motion.div
-          className="flex flex-col items-center gap-6 order-2 lg:order-2"
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          {/* Profile Card */}
-          <div className="h-[260px] w-[260px] md:h-[300px] md:w-[300px] rounded-3xl overflow-hidden relative border border-white/20">
-            <Image
-              src="/pictures/Porfolio pic.png"
-              alt="Yash Vaidya"
-              fill
-              className="object-cover"
-              unoptimized
-              priority
-            />
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-tertiary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-brand-tertiary"></span>
+            </span>
+            <span className="font-geist text-[10px] font-semibold tracking-wider text-brand-primary uppercase">
+              {data.hero.badgeText}
+            </span>
           </div>
-          <div className="flex space-x-6 text-3xl text-gray-300 justify-center items-center">
-            <a href="https://x.com/Yashvaidyaa" target="_blank" rel="noopener noreferrer" aria-label="X (formerly Twitter)">
-              <svg viewBox="0 0 24 24" fill="currentColor" style={{ fill: "currentColor" }} className="w-[1em] h-[1em] hover:text-white cursor-pointer transition-colors">
-                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" style={{ fill: "currentColor" }} />
-              </svg>
-            </a>
-            <a href="https://github.com/Yashvai14" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-              <VscGithub className="hover:text-white cursor-pointer transition-colors" />
-            </a>
-            <a href="https://www.linkedin.com/in/yash-vaidya-417188262" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-              <FaLinkedin className="hover:text-white cursor-pointer transition-colors" />
-            </a>
+
+          {/* Headline */}
+          <h1
+            ref={titleRef}
+            className="text-4xl md:text-6xl lg:text-7xl font-bold font-geist text-white tracking-tight leading-[1.1] mb-6 glow-text max-w-3xl"
+          >
+            {data.hero.title}
+          </h1>
+
+          {/* Subheadings / Pillars */}
+          <div
+            ref={subtitleRef}
+            className="opacity-0 translate-y-4 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 mb-10 text-[#c2c6d6] font-geist text-sm tracking-wide"
+          >
+            {data.hero.subtitle1 && (
+              <div className="flex items-center gap-2 bg-white/2 px-3.5 py-1.5 rounded-full border border-white/5 shadow-inner">
+                <Cpu className="w-4 h-4 text-brand-tertiary" />
+                <span>{data.hero.subtitle1}</span>
+              </div>
+            )}
+            {data.hero.subtitle1 && data.hero.subtitle2 && (
+              <span className="hidden sm:inline text-white/20">|</span>
+            )}
+            {data.hero.subtitle2 && (
+              <div className="flex items-center gap-2 bg-white/2 px-3.5 py-1.5 rounded-full border border-white/5 shadow-inner">
+                <Globe className="w-4 h-4 text-brand-secondary" />
+                <span>{data.hero.subtitle2}</span>
+              </div>
+            )}
           </div>
-        </motion.div>
-
-        {/* Left Content - Order 3 on mobile, Order 1 on desktop */}
-        <motion.div
-          className="flex flex-col justify-center items-center lg:items-start text-center lg:text-left order-3 lg:order-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1.2 }}
-        >
-          {/* Desktop-only Open To Work Badge */}
-          <motion.div
-            className="hidden lg:flex space-x-4 justify-center items-center text-white backdrop-blur-md bg-white/10 p-2 rounded-3xl w-[180px] mb-8"
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <h1>Open To Work</h1>
-            <div className="h-4 w-4 bg-green-600 animate-pulse rounded-full"></div>
-          </motion.div>
-
-          <motion.h1
-            className="text-2xl md:text-3xl font-bold mb-5"
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            Hi, I&apos;m
-          </motion.h1>
-          <motion.h1
-            className="text-4xl md:text-5xl font-bold mb-3 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-blue-500 to-violet-500"
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            Yash Vaidya
-          </motion.h1>
-          <motion.h1
-            className="text-xl md:text-2xl font-semibold mb-5 text-blue-400"
-            initial={{ x: -50, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            Full Stack Developer · AI & Automation · Fresher 2026
-          </motion.h1>
-
-          {/* Typing Effect Paragraph */}
-          <TypedParagraph />
 
           {/* Buttons */}
-          <motion.div
-            className="mt-8 flex flex-wrap justify-center lg:justify-start items-center gap-4"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 1 }}
+          <div
+            ref={ctaRef}
+            className="opacity-0 translate-y-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center w-full sm:w-auto"
           >
             <a
-              href="/Resume/Yash_Vaidya (1).pdf"
-              download="Yash_Vaidya_Resume.pdf"
-              className="bg-gradient-to-br from-violet-500 to-blue-800 text-white px-4 py-2.5 rounded-lg hover:scale-105 transition duration-300 font-bold text-sm"
+              href="/Resume/Yash_Vaidya%20(1).pdf"
+              target="_blank"
+              download
+              className="flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-md bg-linear-to-r from-brand-primary to-brand-secondary text-brand-primary-dark font-geist font-semibold text-sm hover:brightness-110 transition-all hover:shadow-[0_0_30px_rgba(173,198,255,0.4)] hover-target"
             >
               Download Resume
             </a>
-            <Link
-              href="/#contact"
-              className="text-white px-4 py-2.5 rounded-lg hover:bg-gray-800 transition duration-300 border border-gray-400 text-sm"
+            <button
+              onClick={() => {
+                const element = document.getElementById("contact");
+                if (element) {
+                  element.scrollIntoView({ behavior: "smooth" });
+                }
+              }}
+              className="px-8 py-4 w-full sm:w-auto rounded-md bg-white/2 border border-white/10 text-white font-geist font-medium text-sm hover:bg-white/6 hover:border-brand-primary/30 transition-all hover-target"
             >
               Contact Me
-            </Link>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-    </div>
+            </button>
+          </div>
+        </div>
+
+        {/* Right Column: Hero Image */}
+        <div className="lg:col-span-5 flex justify-center items-center relative perspective-1000">
+          <div className="relative w-48 h-48 sm:w-64 sm:h-64 lg:w-80 lg:h-80 rounded-full group">
+            {/* Glow effect behind the image */}
+            <div className="absolute inset-0 rounded-full bg-linear-to-tr from-brand-primary/40 via-brand-tertiary/40 to-brand-secondary/40 shadow-[0_0_80px_rgba(47,217,244,0.3)] animate-glow-pulse -z-10 blur-xl"></div>
+            
+            {/* Spinning border */}
+            <div className="absolute inset-0 rounded-full border-2 border-white/10 animate-spin-slow pointer-events-none"></div>
+            
+            {/* Image Container */}
+            <div className="absolute inset-2 rounded-full overflow-hidden bg-[#0a0f24] border border-white/5 shadow-inner z-10">
+              {data.hero.image ? (
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={data.hero.image}
+                  alt={data.hero.title}
+                  className="w-full h-full object-cover filter group-hover:brightness-110 group-hover:scale-105 transition-all duration-500"
+                />
+              </>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-[#8c909f] font-geist text-xs text-center px-4">Upload photo in Admin</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div
+        ref={scrollRef}
+        onClick={handleScrollClick}
+        className="opacity-0 translate-y-4 absolute bottom-10 flex flex-col items-center gap-2 cursor-pointer text-[#8c909f] hover:text-white transition-colors duration-300 hover-target"
+      >
+        <span className="font-geist text-[10px] tracking-[0.25em] font-medium uppercase">
+          Scroll
+        </span>
+        <ArrowDown className="w-4 h-4 text-brand-tertiary" />
+      </div>
+    </section>
   );
-};
-
-export default Hero;
-
+}

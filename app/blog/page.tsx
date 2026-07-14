@@ -2,7 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { BlogPost } from "@prisma/client";
 import Link from "next/link";
 import Image from "next/image";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/Navbar";
 import { format } from "date-fns";
 
 export const dynamic = "force-dynamic";

@@ -1,36 +1,58 @@
-import React from "react";
+import type { Metadata } from "next";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import { Poppins } from "next/font/google";
-import Scene3DClient from "@/components/scene3d-client";
+import ThreeBackground from "@/components/ThreeBackground";
+import ShaderBackground from "@/components/ShaderBackground";
+import CustomCursor from "@/components/CustomCursor";
+import { PortfolioDataProvider } from "@/context/PortfolioDataContext";
 
-const poppins = Poppins({
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"], // pick what you need
-  variable: "--font-poppins", // optional CSS variable
 });
 
-export const metadata = {
-  title: "Yash Vaidya | Full Stack Developer & AI Automation",
-  description: "Final-year Computer Engineering student specialising in full stack web development and AI automation. Experienced with Next.js, FastAPI, PostgreSQL, LangChain, and LangGraph. Open to full-time roles — Fresher 2026, Nagpur, India.",
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const interSans = Inter({
+  variable: "--font-inter-sans",
+  subsets: ["latin"],
+});
+
+export const metadata: Metadata = {
+  title: "Yash Vaidya | Full Stack Developer",
+  description:
+    "Portfolio of Yash Vaidya. Specialized in Full Stack Development, AI Automation, and Software Engineering.",
+  applicationName: "Yash Vaidya",
+  keywords: [
+    "Yash Vaidya",
+    "AI Automation",
+    "SaaS Development",
+    "Product Engineering",
+    "Software Development",
+    "AI Agents",
+    "n8n Automation",
+  ],
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en">
-      <head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
-        <link rel="shortcut icon" href="/icon.svg" />
-      </head>
-      <body className={poppins.className}>
-        <Scene3DClient />
-        {children}
+    <html
+      lang="en"
+      className={`${geistSans.variable} ${geistMono.variable} ${interSans.variable} h-full antialiased`}
+    >
+      <body className="min-h-full bg-[#0b1326] text-[#dae2fd] font-inter selection:bg-brand-primary/20 selection:text-brand-primary">
+        <ThreeBackground />
+        <ShaderBackground />
+        <CustomCursor />
+        <PortfolioDataProvider>{children}</PortfolioDataProvider>
       </body>
     </html>
   );

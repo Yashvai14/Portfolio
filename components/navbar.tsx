@@ -1,142 +1,175 @@
 "use client";
-import Link from "next/link";
-import React, { useEffect, useState, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
 
-const navLinks = [
-  { name: "Home", href: "/#home" },
-  { name: "About", href: "/#about" },
-  { name: "Skills", href: "/#skills" },
-  { name: "Projects", href: "/#project" },
-  { name: "Contact", href: "/#contact" },
-  { name: "Blog", href: "/blog" },
+import { useState, useEffect } from "react";
+import { Menu, X, ArrowUpRight } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+
+const navItems = [
+  { label: "Home", id: "home" },
+  { label: "About", id: "about" },
+  { label: "Projects", id: "projects" },
+  { label: "Skills", id: "skills" },
+  { label: "Services", id: "services" },
+  { label: "Blog", id: "blog", path: "/blog" },
 ];
 
-const Navbar = () => {
-  const [visible, setVisible] = useState(true);
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const lastScrollY = useRef(0);
+  const [activeSection, setActiveSection] = useState("home");
+  const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
-    const controlNavbar = () => {
-      if (typeof window !== "undefined") {
-        const currentScrollY = window.scrollY;
-        const prevScrollY = lastScrollY.current;
-        if (currentScrollY - prevScrollY > 5) {
-          setVisible(false); // scroll down → hide
-          setIsOpen(false); // also close mobile dropdown
-        } else if (prevScrollY - currentScrollY > 5) {
-          setVisible(true); // scroll up → show
+    if (pathname !== "/") return;
+
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      const sections = navItems.filter(item => !item.path).map((item) => document.getElementById(item.id));
+      const scrollPosition = window.scrollY + 120;
+
+      for (const section of sections) {
+        if (section) {
+          const top = section.offsetTop;
+          const height = section.offsetHeight;
+          if (scrollPosition >= top && scrollPosition < top + height) {
+            setActiveSection(section.id);
+            break;
+          }
         }
-        lastScrollY.current = currentScrollY;
       }
     };
 
-    window.addEventListener("scroll", controlNavbar);
-    return () => window.removeEventListener("scroll", controlNavbar);
-  }, []);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [pathname]);
+
+  const handleNavClick = (id: string, path?: string) => {
+    setIsOpen(false);
+    
+    if (path) {
+      router.push(path);
+      return;
+    }
+
+    if (pathname !== "/") {
+      router.push(`/#${id}`);
+      return;
+    }
+
+    const element = document.getElementById(id);
+    if (element) {
+      const offset = 80;
+      const bodyRect = document.body.getBoundingClientRect().top;
+      const elementRect = element.getBoundingClientRect().top;
+      const elementPosition = elementRect - bodyRect;
+      const offsetPosition = elementPosition - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
-    <AnimatePresence>
-      {visible && (
-        <motion.div
-          initial={{ y: -100, opacity: 0 }}
-          animate={{ y: 40, opacity: 1 }}
-          exit={{ y: -100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          className="fixed inset-x-0 z-50 px-3 flex flex-col items-center"
+    <nav
+      className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        isScrolled || pathname !== "/" ? "glass-nav py-4 bg-[#050816]/90 border-b border-white/5 backdrop-blur-md" : "bg-transparent py-6"
+      }`}
+    >
+      <div className="max-w-6xl mx-auto px-6 flex justify-between items-center">
+        {/* Logo */}
+        <div
+          onClick={() => handleNavClick("home")}
+          className="text-xl font-bold font-geist tracking-tight text-white cursor-pointer flex items-center gap-2 hover-target"
         >
-          {/* Desktop Navbar */}
-          <motion.ul
-            className="hidden md:flex justify-center items-center  bg-white/10 backdrop-blur-md space-x-2 sm:space-x-4 md:space-x-8 p-2.5 sm:p-4 rounded-3xl w-full max-w-[650px] shadow-lg relative px-4 sm:px-6 text-xs sm:text-sm border border-white/10"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {navLinks.map((link) => (
-              <motion.li
-                key={link.name}
-                className="relative text-white cursor-pointer px-2 sm:px-3 py-1 rounded-lg"
-                whileHover={{ scale: 1.1 }}
-                transition={{ type: "spring", stiffness: 300 }}
+          Yash <span className="text-brand-tertiary">Vaidya</span>
+        </div>
+
+        {/* Desktop Menu */}
+        <div className="md:flex items-center gap-8">
+          {navItems.map((item) => {
+            const isActive = item.path ? pathname === item.path : activeSection === item.id && pathname === "/";
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id, item.path)}
+                className={`relative font-geist text-sm font-medium tracking-wide transition-colors hover:text-white cursor-pointer pb-1 hover-target ${
+                  isActive ? "text-white" : "text-[#c2c6d6]"
+                }`}
               >
-                <Link href={link.href}>
+                {item.label}
+                {isActive && (
                   <span
-                    className={`relative z-10 ${pathname === link.href ? "text-blue-400 font-bold" : ""
-                      }`}
-                  >
-                    {link.name}
-                  </span>
-                </Link>
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-brand-tertiary rounded-full"
+                    style={{
+                      boxShadow: "0 0 10px #2fd9f4, 0 0 20px #2fd9f4",
+                    }}
+                  />
+                )}
+              </button>
+            );
+          })}
+        </div>
 
-                {/* Animated underline / highlight on hover or active */}
-                <motion.div
-                  layoutId="nav-underline"
-                  className="absolute left-0 right-0 bottom-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full"
-                  animate={{
-                    opacity: pathname === link.href ? 1 : 0,
-                    scaleX: pathname === link.href ? 1 : 0,
-                  }}
-                  transition={{ type: "spring", stiffness: 300, damping: 25 }}
-                />
-              </motion.li>
-            ))}
-          </motion.ul>
-
-          {/* Mobile Navbar Header */}
-          <motion.div
-            className="flex md:hidden justify-between items-center bg-white/10 backdrop-blur-md p-3 px-6 rounded-3xl w-full max-w-[90%] shadow-lg border border-white/10 text-white relative"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+        {/* CTA Button */}
+        <div className="hidden md:block">
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("contact");
+            }}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-md bg-brand-primary text-brand-primary-dark font-geist text-xs font-semibold hover:bg-white hover:text-black transition-all hover:shadow-[0_0_20px_rgba(173,198,255,0.4)] hover-target"
           >
-            <span className="font-bold text-sm tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-400">
-              YASH VAIDYA
-            </span>
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-              aria-label="Toggle menu"
-            >
-              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </motion.div>
+            Book a Call <ArrowUpRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
 
-          {/* Mobile Dropdown Menu overlay */}
-          <AnimatePresence>
-            {isOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -20, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-16 w-[90%] bg-[#0a0f1e]/95 backdrop-blur-lg border border-white/10 rounded-2xl p-5 shadow-2xl flex flex-col space-y-4 md:hidden mt-2 z-40"
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden text-white hover:text-brand-tertiary transition-colors cursor-pointer hover-target"
+        >
+          {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+      </div>
+
+      {/* Mobile Drawer */}
+      <div
+        className={`md:hidden fixed inset-x-0 top-[60px] bg-brand-bg/95 border-b border-white/5 backdrop-blur-xl transition-all duration-300 ease-in-out z-30 ${
+          isOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4 pointer-events-none"
+        }`}
+      >
+        <div className="flex flex-col gap-4 p-6">
+          {navItems.map((item) => {
+            const isActive = item.path ? pathname === item.path : activeSection === item.id && pathname === "/";
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleNavClick(item.id, item.path)}
+                className={`text-left font-geist text-base font-medium py-2 border-b border-white/5 ${
+                  isActive ? "text-brand-tertiary" : "text-[#c2c6d6]"
+                }`}
               >
-                <ul className="flex flex-col space-y-3">
-                  {navLinks.map((link) => (
-                    <li key={link.name}>
-                      <Link
-                        href={link.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`block text-center text-white py-2.5 rounded-xl hover:bg-white/5 transition-all text-sm font-medium ${
-                          pathname === link.href ? "text-blue-400 font-bold bg-white/5" : ""
-                        }`}
-                      >
-                        {link.name}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      )}
-    </AnimatePresence>
+                {item.label}
+              </button>
+            );
+          })}
+          <a
+            href="#contact"
+            onClick={(e) => {
+              e.preventDefault();
+              handleNavClick("contact");
+            }}
+            className="flex items-center justify-center gap-1.5 px-4 py-3 mt-2 rounded-md bg-brand-primary text-brand-primary-dark font-geist text-sm font-semibold text-center"
+          >
+            Book a Call <ArrowUpRight className="w-4 h-4" />
+          </a>
+        </div>
+      </div>
+    </nav>
   );
-};
-
-export default Navbar;
+}
